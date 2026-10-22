@@ -1,0 +1,143 @@
+{
+  "console": {
+    "source": {
+      "repository": "WernerKr/davisconsoleapi",
+      "revision": "1d312ac5faa6779a6a34e5200a535596980efdc2",
+      "path": "bin/user/davisconsoleapi.py",
+      "url": "https://raw.githubusercontent.com/WernerKr/davisconsoleapi/1d312ac5faa6779a6a34e5200a535596980efdc2/bin/user/davisconsoleapi.py",
+      "sha256": "f6d21d9a14bc1b40c4a6f07867433ab50fa7d85b4a32cd0f6832f9b6efc70623"
+    },
+    "comparisons": [
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "windGust": 8.0,
+        "windGustDir": 270.0,
+        "UV": 0.0,
+        "radiation": 0.0,
+        "dewpoint": 0.0
+      }
+    ],
+    "differences": [
+      {
+        "case": "zero Fahrenheit is a valid temperature",
+        "old": "outTemp absent",
+        "new": 0.0
+      }
+    ]
+  },
+  "wlip": {
+    "source": {
+      "repository": "korria/weewx-weatherlink-v2",
+      "revision": "ee42463f39b211bdc69d008f937c6f714fe5ba10",
+      "path": "bin/user/weatherlinkv2.py",
+      "url": "https://raw.githubusercontent.com/korria/weewx-weatherlink-v2/ee42463f39b211bdc69d008f937c6f714fe5ba10/bin/user/weatherlinkv2.py",
+      "sha256": "facaa73d2a8265a34d1168d48e0567e5e6232455d269c15c250b10e82a30efb7"
+    },
+    "comparisons": [
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "barometer": 29.92
+      },
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "windGust": 8.0,
+        "windGustDir": 270.0,
+        "rain": 0.1,
+        "interval": 5,
+        "barometer": 29.92
+      }
+    ],
+    "differences": []
+  },
+  "wll": {
+    "source": {
+      "repository": "Drealine/weatherlinklive-driver-weewx",
+      "revision": "2fc184279208df99cdec03ac0fb2590912a80982",
+      "path": "bin/user/WLLDriver.py",
+      "url": "https://raw.githubusercontent.com/Drealine/weatherlinklive-driver-weewx/2fc184279208df99cdec03ac0fb2590912a80982/bin/user/WLLDriver.py",
+      "sha256": "e7189d2bf9161a72667d647dbf3dde30e80b90e4ff655974aa084178df883f72"
+    },
+    "comparisons": [
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "windGust": 8.0,
+        "windGustDir": 270.0,
+        "rain": 0.1,
+        "interval": 5
+      }
+    ],
+    "differences": [
+      {
+        "case": "archive uses reported temperature average",
+        "old_final": 70,
+        "new_average": 68
+      }
+    ]
+  },
+  "wldc": {
+    "source": {
+      "repository": "richardjarvis/weatherlinkdotcom-driver-weewx",
+      "revision": "1e5b97405148ad8c4d5b354e1d8ba19fff044836",
+      "path": "bin/user/WLDCDriver.py",
+      "url": "https://raw.githubusercontent.com/richardjarvis/weatherlinkdotcom-driver-weewx/1e5b97405148ad8c4d5b354e1d8ba19fff044836/bin/user/WLDCDriver.py",
+      "sha256": "d5520ae2cf8289a71eb1688d61f01ebabeb6b7e744cfaf3f9e6585cd60408e23"
+    },
+    "comparisons": [
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "windGust": 8.0,
+        "windGustDir": 270.0,
+        "rain": 0.1,
+        "interval": 5
+      }
+    ],
+    "differences": [
+      {
+        "case": "archive uses reported temperature average",
+        "old_final": 70,
+        "new_average": 68
+      }
+    ]
+  },
+  "v1": {
+    "source": {
+      "repository": "sshambar/weewx-wlink",
+      "revision": "7af0ff01812791afea6fc77b9831bb2d53908422",
+      "path": "bin/user/wlink.py",
+      "url": "https://raw.githubusercontent.com/sshambar/weewx-wlink/7af0ff01812791afea6fc77b9831bb2d53908422/bin/user/wlink.py",
+      "sha256": "4f2ebdcdb7a3c898a289c2b3f3cfbf82376030776560416f2aed0d78c4919bf8"
+    },
+    "comparisons": [
+      {
+        "outTemp": 68.0,
+        "outHumidity": 60.0,
+        "windSpeed": 2.0,
+        "windDir": 270.0,
+        "barometer": 29.92,
+        "inTemp": 72.0
+      }
+    ],
+    "differences": [
+      {
+        "case": "numeric zero humidity is retained",
+        "old": "outHumidity absent",
+        "new": 0
+      }
+    ]
+  }
+}

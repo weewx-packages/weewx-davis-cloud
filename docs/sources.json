@@ -1,0 +1,12 @@
+{
+  "checked_on": "2026-10-22",
+  "documentation_repository": "https://github.com/weatherlink/v2-api",
+  "documentation_revision": "d4eefe97780246c79b93f108cf386ca459bf8df7",
+  "primary_sources": {
+    "sensor-catalog.json": "9e71694304909634907bad510b701c02287de93ad34eed5c39fdfa15c7c6ea52",
+    "v2-api.yaml": "582ac6b24f2a97a8dd1c8dd8be0b29d204c77bfe5edae1b7fc379d9f9103036f"
+  },
+  "source_code_reused": false,
+  "implementation_license": "GPL-3.0-or-later",
+  "note": "Manufacturer field names, data-structure numbers and units are protocol facts. The complete downloaded reference catalog and third-party implementation are private research inputs, excluded from the package."
+}
