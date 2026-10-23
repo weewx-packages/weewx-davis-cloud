@@ -17,15 +17,20 @@ credentials. Local USB, TCP, WLL UDP and SDR acquisition remain separate drivers
 
 ## Install and select the station
 
-Requires WeeWX 5.5 or later, below 6, and Python 3.10 or later. The runtime has no
+Requires WeeWX 5.5 or later, below 6, and Python >=3.10,<3.15. The runtime has no
 additional Python dependencies.
 
-Build the extension with `python tools/build.py`, then install the resulting
-archive with:
+Install the published pre-release archive with the `weectl` belonging to your
+WeeWX environment:
 
 ```sh
-weectl extension install dist/davis-cloud-0.1.0a1.tar.gz --config=/path/to/weewx.conf
+weectl extension install https://github.com/weewx-packages/weewx-davis-cloud/releases/download/v0.1.0a1/davis-cloud-0.1.0a1.tar.gz --config=/path/to/weewx.conf
 ```
+
+Replace `/path/to/weewx.conf` with your station configuration. Stock WeeWX 5
+accepts this URL or a downloaded archive; it needs no catalog integration. To
+build from source, run `python tools/build.py` and install the generated
+`dist/davis-cloud-0.1.0a1.tar.gz` instead.
 
 Installation adds files only. It leaves the active driver, database binding and
 schema unchanged. Add this section to `weewx.conf` and enter your own API key,
@@ -129,3 +134,5 @@ The CI workflow repeats these comparisons against WeeWX master and development.
 The implementation is GPL-3.0-or-later. It is written against the
 [WeatherLink API contract](https://weatherlink.github.io/v2-api/), rather than
 combining source files from projects with unresolved redistribution rights.
+
+<!-- Documentation updated 2026-10-23 by weewx-packages. -->
