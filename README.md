@@ -17,6 +17,9 @@ credentials. Local USB, TCP, WLL UDP and SDR acquisition remain separate drivers
 
 ## Install and select the station
 
+An existing WeeWX station is required. Replace `/path/to/weewx.conf`
+with its configuration file before running the commands.
+
 Requires WeeWX 5.5 or later, below 6, and Python >=3.10,<3.15. The runtime has no
 additional Python dependencies.
 
@@ -27,10 +30,10 @@ WeeWX environment:
 weectl extension install https://github.com/weewx-packages/weewx-davis-cloud/releases/download/v0.1.0a1/davis-cloud-0.1.0a1.tar.gz --config=/path/to/weewx.conf
 ```
 
-Replace `/path/to/weewx.conf` with your station configuration. Stock WeeWX 5
-accepts this URL or a downloaded archive; it needs no catalog integration. To
-build from source, run `python tools/build.py` and install the generated
-`dist/davis-cloud-0.1.0a1.tar.gz` instead.
+Stock WeeWX 5 accepts this URL or a downloaded archive; it needs no catalog
+integration.
+For a source build, first clone this repository and enter its checkout as
+shown under [Development](#development).
 
 Installation adds files only. It leaves the active driver, database binding and
 schema unchanged. Add this section to `weewx.conf` and enter your own API key,
@@ -117,6 +120,18 @@ custom fields requires corresponding archive columns. This package does not
 alter an existing database or install a skin.
 
 ## Development
+
+For source builds, start in an empty working directory with Git and Python
+available:
+
+```sh
+git clone --branch v0.1.0a1 https://github.com/weewx-packages/weewx-davis-cloud.git
+cd weewx-davis-cloud
+python tools/build.py
+```
+
+Install `dist/davis-cloud-0.1.0a1.tar.gz` with your station's `weectl`.
+The following test and oracle commands also run from this checkout.
 
 Create `.venv`, install `weewx`, `pytest`, `pytest-cov`, `mypy` and `ruff`, then run
 `just fast`. `just test` includes coverage reporting. Tests use independent
