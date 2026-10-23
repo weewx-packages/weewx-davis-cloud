@@ -22,6 +22,8 @@ Keep the API transport separate from station-specific decoding. Do not silently
 choose among conflicting sensors, fill historical gaps with current values or
 write configuration and archive databases from the installer. Published assets
 must remain immutable. Credentials must never appear in diagnostics or logs.
+README follows the weewx-packages schema and names no versions or archive URLs;
+installation links to the catalog page.
 
 ## Commands
 
