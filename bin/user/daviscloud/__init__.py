@@ -2,4 +2,4 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """WeatherLink cloud acquisition for WeeWX."""
 
-VERSION = '0.1.0a1'
+VERSION = '0.1.0a2'

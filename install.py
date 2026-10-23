@@ -12,7 +12,7 @@ def loader():
 class DavisCloudInstaller(ExtensionInstaller):
     def __init__(self):
         super().__init__(
-            version='0.1.0a1', name='davis-cloud',
+            version='0.1.0a2', name='davis-cloud',
             description='Unified Davis WeatherLink cloud driver and optional health service',
             author='weewx-packages contributors',
             files=[('bin/user/daviscloud', [
