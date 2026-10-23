@@ -1,43 +1,39 @@
 # Davis cloud for WeeWX
 
 One driver for WeatherLink cloud observations and archives, with an optional
-health service for stations that collect their weather locally.
+health service for stations that collect their weather locally. It reads the
+cloud only. Local USB, TCP, WLL UDP and SDR acquisition remain separate drivers.
 
-**Pre-release 0.1.0a1.** Do not replace a working station without checking its
-sensor mapping and archive configuration. Existing Davis cloud packages remain
-available while migration and live device checks are incomplete.
+**Pre-release.** Do not replace a working station without checking its sensor
+mapping and archive configuration. See [Limitations](#limitations).
 
-The v2 decoder covers WeatherLinkIP/Vantage Connect, WeatherLink Live, Console
-6313 and AirLink records. EnviroMonitor ISS records use the same observations;
-individual EnviroMonitor nodes need explicit field and unit declarations. A v1
-adapter reads current conditions. The v1 adapter has no historical download.
+This is an own project of the weewx-packages organization. It is written
+against the [WeatherLink API contract](https://weatherlink.github.io/v2-api/),
+rather than combining source files from projects with unresolved redistribution
+rights.
 
-This is a cloud driver. It requires Internet access and WeatherLink API
-credentials. Local USB, TCP, WLL UDP and SDR acquisition remain separate drivers.
+## Requirements
 
-## Install and select the station
+* Internet access from the WeeWX host.
+* WeatherLink API v2 credentials: API key, API secret and station ID. The
+  legacy v1 adapter uses the device ID and password instead.
+* For cloud archives, historic data access for the station in WeatherLink.
+* No Python packages beyond WeeWX.
 
-An existing WeeWX station is required. Replace `/path/to/weewx.conf`
-with its configuration file before running the commands.
+## Installation
 
-Requires WeeWX 5.5 or later, below 6, and Python >=3.10,<3.15. The runtime has no
-additional Python dependencies.
-
-Install the published pre-release archive with the `weectl` belonging to your
-WeeWX environment:
-
-```sh
-weectl extension install https://github.com/weewx-packages/weewx-davis-cloud/releases/download/v0.1.0a1/davis-cloud-0.1.0a1.tar.gz --config=/path/to/weewx.conf
-```
-
-Stock WeeWX 5 accepts this URL or a downloaded archive; it needs no catalog
-integration.
-For a source build, first clone this repository and enter its checkout as
-shown under [Development](#development).
+Install `davis-cloud` from the [WeeWX packages catalog](https://github.com/weewx-packages/catalog/blob/main/packages/davis-cloud.md).
+The catalog page lists the current release, its WeeWX and Python
+requirements, and the install, update and removal commands.
 
 Installation adds files only. It leaves the active driver, database binding and
-schema unchanged. Add this section to `weewx.conf` and enter your own API key,
-secret and station ID. Protect the file as you would other account credentials.
+schema unchanged. Configure the driver as shown below, check it with the
+diagnostic commands, then select it as the station type.
+
+## Configuration
+
+Add this section to `weewx.conf` and enter your own API key, secret and station
+ID. Protect the file as you would other account credentials.
 
 ```ini
 [DavisCloud]
@@ -52,7 +48,15 @@ secret and station ID. Protect the file as you would other account credentials.
     archive_interval = 300
 ```
 
-Use the station ID, not a WeatherLinkIP device ID. To list accessible stations:
+Use the station ID, not a WeatherLinkIP device ID. The
+[configuration reference](docs/configuration.md) lists every option with its
+default, the custom node observations and the health fields.
+
+### Checking the connection
+
+The diagnostic reads from the cloud and prints JSON. It writes neither the
+configuration nor a database. Run it with the Python interpreter that runs
+WeeWX. To list accessible stations:
 
 ```sh
 PYTHONPATH=/path/to/station/bin python -m user.daviscloud \
@@ -67,23 +71,25 @@ For current-only operation, set `[StdArchive] record_generation = software` and
 choose the desired archive interval there. Polling more often does not make the
 cloud observations update faster.
 
-## Enable cloud archives
+### Enabling cloud archives
 
-Historic access depends on the station's WeatherLink permissions. Set
-`[DavisCloud] archive = true`, set `archive_interval` to the station's actual
-archive interval in seconds, and set `[StdArchive] record_generation = hardware`.
-WeeWX then requests cloud archives at startup and during normal operation.
+Set `[DavisCloud] archive = true`, set `archive_interval` to the station's
+actual archive interval in seconds, and set `[StdArchive] record_generation =
+hardware`. The driver refuses to start with `archive = true` and any other
+record generation. WeeWX then requests cloud archives at startup and during
+normal operation.
 
 With an empty database, `max_backfill_days` limits the initial import to seven
 days by default. With an existing database, catch-up starts at its last committed
 timestamp, including outages longer than that setting. Failed windows remain
 failed; the driver never advances a persistent cursor past them.
 
-Use `--history START END` to inspect Unix-time bounds without writing a database.
-The returned range is `(START, END]`. The driver splits requests into windows of
-at most 24 hours. Individual archive rows retain their reported intervals.
+With `archive = true`, `--history START END` inspects Unix-time bounds without
+writing a database. The returned range is `(START, END]`. The driver splits
+requests into windows of at most 24 hours. Individual archive rows retain their
+reported intervals.
 
-## Map multiple sensors
+### Mapping multiple sensors
 
 The driver refuses conflicting automatic assignments. Select the logical sensor
 ID for each conflicting observation. Selectors use normalized WeeWX names, so
@@ -103,11 +109,9 @@ the same selection works for current and historical data.
 
 Replace the example LSIDs with those reported by `--sensors`. Map each conflicting
 field, including cumulative rain totals when several collectors report them.
-The driver does not choose a different sensor when the selected sensor stops
-reporting. See [configuration](docs/configuration.md) for custom node measurements
-and [consolidation](docs/consolidation.md) before replacing an existing driver.
+Read [consolidation](docs/consolidation.md) before replacing an existing driver.
 
-## Add cloud health to a local station
+### Adding cloud health to a local station
 
 Keep the local station driver. Configure the same `[DavisCloud]` credentials,
 then append `user.daviscloud.service.HealthService` to
@@ -116,27 +120,32 @@ service. Health acquisition runs in a background thread and preserves readings
 already present in the local LOOP packet.
 
 Health fields are available to LOOP consumers. Storing additional health or
-custom fields requires corresponding archive columns. This package does not
-alter an existing database or install a skin.
+custom fields requires corresponding archive columns.
+
+## Limitations
+
+* Pre-release. Existing Davis cloud packages remain available while migration
+  and live device checks are incomplete. The tests use offline fixtures. They
+  do not establish that a physical station or a paid account works.
+* The v2 decoder covers WeatherLinkIP/Vantage Connect, WeatherLink Live,
+  Console 6313 and AirLink records. EnviroMonitor ISS records use the same
+  observations. Individual EnviroMonitor nodes need explicit field and unit
+  declarations.
+* The v1 adapter reads current conditions only. It has no historical download,
+  station discovery or sensor inventory.
+* The driver does not switch to another sensor when the selected sensor stops
+  reporting.
+* The package does not alter an existing database or install a skin.
 
 ## Development
-
-For source builds, start in an empty working directory with Git and Python
-available:
-
-```sh
-git clone --branch v0.1.0a1 https://github.com/weewx-packages/weewx-davis-cloud.git
-cd weewx-davis-cloud
-python tools/build.py
-```
-
-Install `dist/davis-cloud-0.1.0a1.tar.gz` with your station's `weectl`.
-The following test and oracle commands also run from this checkout.
 
 Create `.venv`, install `weewx`, `pytest`, `pytest-cov`, `mypy` and `ruff`, then run
 `just fast`. `just test` includes coverage reporting. Tests use independent
 fixtures, install the archive into a disposable station, and exercise the real
 WeeWX engine and SQLite archive. They never require a live account.
+
+`python tools/build.py` writes the reproducible extension archive and its
+SHA-256 under `dist/`.
 
 `just oracles` additionally downloads five existing decoder implementations at
 the revisions and SHA-256 hashes in [the oracle manifest](docs/oracles.json).
@@ -146,8 +155,7 @@ are compared explicitly; the test does not accept an empty intersection of
 fields. Sources remain in the ignored research directory and are not packaged.
 The CI workflow repeats these comparisons against WeeWX master and development.
 
-The implementation is GPL-3.0-or-later. It is written against the
-[WeatherLink API contract](https://weatherlink.github.io/v2-api/), rather than
-combining source files from projects with unresolved redistribution rights.
+## License
 
-<!-- Documentation updated 2026-10-23 by weewx-packages. -->
+Copyright 2026 weewx-packages contributors. Licensed under the GNU General
+Public License, version 3 or later. See [LICENSE](LICENSE).

@@ -10,7 +10,8 @@ All options below belong to `[DavisCloud]` unless a subsection is shown.
 * `device_id`, `password`, `api_token`: Legacy v1 credentials. The token is optional.
 * `poll_interval`: Cloud polling period in seconds. Default 60, minimum 10.
 * `max_age`: Maximum age of source observations in seconds. Default 1800.
-  Samples more than 30 seconds in the future are excluded.
+  Samples more than 30 seconds in the future are excluded. The health service
+  accepts at most 86400.
 * `timeout`: HTTP request timeout in seconds. Default 15.
 * `retries`: Additional attempts on connection errors, HTTP 429 and HTTP 5xx.
   Default 2, maximum 5. Authorization failures are not retried.
@@ -29,6 +30,8 @@ All options below belong to `[DavisCloud]` unless a subsection is shown.
 
 `[[sensor_map]]` maps an output observation to `LSID.observation`. Both names
 use WeeWX observations, not raw API field names. Their unit groups must match.
+The target must be a known WeeWX observation or a custom observation declared
+under `[[observations]]`.
 LSIDs remain the identity even if a transmitter's channel number changes.
 
 Automatic mappings include outdoor and indoor weather, rain, solar radiation,
@@ -40,7 +43,8 @@ archive temperature averages, for example, take precedence over final values.
 
 `[[observations]]` declares raw fields whose units cannot be inferred safely.
 Each subsection names a WeeWX output observation and requires `sensor`, `field`,
-`unit` and `group`.
+`unit` and `group`. The names `dateTime`, `usUnits`, `interval` and `rain` are
+reserved.
 
 ```ini
     [[observations]]
