@@ -16,7 +16,7 @@ def build():
         Path: The generated archive.
     """
     root = Path(__file__).resolve().parents[1]
-    version = '0.1.0a1'
+    version = '0.1.0a2'
     destination = root / 'dist' / ('davis-cloud-%s.tar.gz' % version)
     destination.parent.mkdir(exist_ok=True)
     buffer = io.BytesIO()
